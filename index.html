@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scaffold Manhour Estimator</title>
+  <style>
+    body {
+      font-family: Roboto, sans-serif;
+      background: #f9f9f9;
+      padding: 40px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h2 {
+      font-family: Oswald, sans-serif;
+      color: #002147;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #ff6600;
+      color: white;
+      font-size: 16px;
+      padding: 10px 15px;
+      border: none;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    .results {
+      margin-top: 25px;
+      padding: 15px;
+      background: #e6e6e6;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Scaffold Manhour Estimator</h2>
+
+  <label for="qty">Total Quantity of Pieces Shipped (Including Consumables):</label>
+  <input type="number" id="qty" placeholder="e.g., 4871">
+
+  <label for="minutesPerPiece">Estimated Minutes per Piece:</label>
+  <input type="number" id="minutesPerPiece" value="18">
+
+  <label for="actualHours">Actual Manhours (optional):</label>
+  <input type="number" id="actualHours" placeholder="e.g., 1188">
+
+  <button onclick="calculate()">Estimate</button>
+
+  <div class="results" id="output" style="display: none;">
+    <p><strong>Estimated Manhours:</strong> <span id="estimatedHours"></span> hrs</p>
+    <p id="actualOutput" style="display: none;">
+      <strong>Time Saved:</strong> <span id="timeSaved"></span> hrs<br>
+      <strong>Actual Minutes per Piece:</strong> <span id="actualMins"></span> mins
+    </p>
+  </div>
+
+  <script>
+    function calculate() {
+      const qty = parseFloat(document.getElementById("qty").value);
+      const minutesPerPiece = parseFloat(document.getElementById("minutesPerPiece").value);
+      const actualHours = parseFloat(document.getElementById("actualHours").value);
+
+      if (isNaN(qty) || isNaN(minutesPerPiece)) {
+        alert("Please enter both Quantity and Estimated Minutes per Piece.");
+        return;
+      }
+
+      const estimatedManhours = (qty * minutesPerPiece) / 60;
+      document.getElementById("estimatedHours").textContent = estimatedManhours.toFixed(2);
+      document.getElementById("output").style.display = "block";
+
+      if (!isNaN(actualHours)) {
+        const timeSaved = estimatedManhours - actualHours;
+        const actualMinutesPerPiece = (actualHours * 60) / qty;
+        document.getElementById("timeSaved").textContent = timeSaved.toFixed(2);
+        document.getElementById("actualMins").textContent = actualMinutesPerPiece.toFixed(2);
+        document.getElementById("actualOutput").style.display = "block";
+      } else {
+        document.getElementById("actualOutput").style.display = "none";
+      }
+    }
+  </script>
+
+</body>
+</html>
